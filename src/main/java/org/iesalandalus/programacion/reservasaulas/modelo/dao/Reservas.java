@@ -73,7 +73,7 @@ public class Reservas {
         if (reserva == null) {
             throw new IllegalArgumentException("No se puede realizar una reserva nula.");
         }
-        
+
         if (!esMesSiguienteOPosterior(reserva)) {
             throw new OperationNotSupportedException("Sólo se pueden hacer reservas para el mes que viene o posteriores.");
         }
@@ -90,24 +90,23 @@ public class Reservas {
                 throw new OperationNotSupportedException("Ya se ha realizado una reserva por hora para este día y aula.");
             }
             if (this.coleccionReservas.contains(reserva)) {
-            throw new OperationNotSupportedException("La reserva ya existe.");
-        }
+                throw new OperationNotSupportedException("La reserva ya existe.");
+            }
         }
 
         this.coleccionReservas.add(reserva);
 
     }
 
-    private boolean esMesSiguienteOPosterior(Reserva reserva) {
-        if (reserva == null) {
-            throw new IllegalArgumentException("No se puede realizar una reserva nula.");
+    private boolean esMesSiguienteOPosterior(Reserva aInsertar) {
+        if (aInsertar == null) {
+            throw new IllegalArgumentException("La reserva no puede ser nula.");
         }
         LocalDate mesSiguiente = LocalDate.now().plusMonths(1);
-        if (reserva.getPermanencia().getDia().equals(mesSiguiente) || reserva.getPermanencia().getDia().isAfter(mesSiguiente)) {
-            return true;
-        } else {
+        if (aInsertar.getPermanencia().getDia().isBefore(LocalDate.of(mesSiguiente.getYear(), mesSiguiente.getMonth(), 1))) {
             return false;
         }
+        return true;
     }
 
     private float getPuntosGastadosReserva(Reserva reserva) {
